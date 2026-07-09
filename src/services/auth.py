@@ -5,7 +5,7 @@ from fastapi_jwt import JwtAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.repositories.auth import AuthRepository
 from src.repositories.user import UserRepository
-from src.schemas.user import UserRead
+from src.schemas.user import UserRead, UserCreate
 from src.utils.logging import log_service
 from src.utils.security import access_security, refresh_security
 from src.schemas.auth import RegistrationRequest, LoginRequest, RefreshResponse, AuthTokens
@@ -105,7 +105,7 @@ class AuthService:
             bcrypt.gensalt()
         ).decode("utf-8")
         
-        new_user = await AuthRepository.create_new_user(db, data.username, hashed_password, data.email)
+        new_user = await AuthRepository.create_new_user(db, UserCreate(email=data.email, username=data.username, password=hashed_password, avatar_url=""))
 
         if not new_user:
             raise HTTPException(status_code=500, detail="Failed to create user")
