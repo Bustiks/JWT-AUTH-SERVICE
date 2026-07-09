@@ -15,15 +15,20 @@ from src.utils.dependencies import get_db
 
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
 
+
 @auth_router.post("/registration", response_model=RegistrationResponse)
-async def registration(data: RegistrationRequest, response: Response, db: AsyncSession = Depends(get_db)):
+async def registration(
+    data: RegistrationRequest, response: Response, db: AsyncSession = Depends(get_db)
+):
     result = await AuthService.registration(db, data)
     set_auth_cookies(response, result.access_token, result.refresh_token)
     return RegistrationResponse(user=result.user)
 
 
 @auth_router.post("/login", response_model=LoginResponse)
-async def login(data: LoginRequest, response: Response, db: AsyncSession = Depends(get_db)):
+async def login(
+    data: LoginRequest, response: Response, db: AsyncSession = Depends(get_db)
+):
     result = await AuthService.login(db, data)
     set_auth_cookies(response, result.access_token, result.refresh_token)
     return LoginResponse(user=result.user)

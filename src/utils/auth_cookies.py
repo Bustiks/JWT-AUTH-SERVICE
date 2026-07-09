@@ -2,7 +2,7 @@ from fastapi import Response
 from src.database.config import settings
 from src.utils.security import access_security, refresh_security
 
-#TODO: TAKING TOKENS FROM ENV
+# TODO: TAKING TOKENS FROM ENV
 ACCESS_TOKEN_COOKIE = "access_token_cookie"
 REFRESH_TOKEN_COOKIE = "refresh_token_cookie"
 

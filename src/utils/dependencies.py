@@ -7,11 +7,16 @@ from src.schemas.auth import UserRead
 from src.services.user import UserService
 from fastapi import Depends, HTTPException
 
+
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     async with async_session() as session:
         yield session
 
-async def get_current_user(db: AsyncSession = Depends(get_db), credentials: JwtAuthorizationCredentials = Depends(access_security)) -> UserRead:
+
+async def get_current_user(
+    db: AsyncSession = Depends(get_db),
+    credentials: JwtAuthorizationCredentials = Depends(access_security),
+) -> UserRead:
     token_type = credentials.subject.get("type")
     if token_type != "access":
         raise HTTPException(
@@ -42,3 +47,4 @@ async def get_current_user(db: AsyncSession = Depends(get_db), credentials: JwtA
         )
 
     return UserRead.model_validate(user)
+

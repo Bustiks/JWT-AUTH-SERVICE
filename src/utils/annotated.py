@@ -11,7 +11,7 @@ created_at = Annotated[
     mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.datetime.now(datetime.UTC),
-    )
+    ),
 ]
 
 updated_at = Annotated[
@@ -20,8 +20,9 @@ updated_at = Annotated[
         DateTime(timezone=True),
         default=lambda: datetime.datetime.now(datetime.UTC),
         onupdate=lambda: datetime.datetime.now(datetime.UTC),
-    )
+    ),
 ]
+
 
 class Locale(enum.Enum):
     ru = "ru-RU"

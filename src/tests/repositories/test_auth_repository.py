@@ -6,6 +6,7 @@ from src.repositories.auth import AuthRepository
 from src.schemas.auth import RegistrationRequest
 from src.schemas.user import UserRead
 
+
 async def _create_test_user(db: AsyncSession, data: RegistrationRequest):
     return await AuthRepository.create_new_user(
         db, data.username, data.password, data.email
@@ -14,7 +15,14 @@ async def _create_test_user(db: AsyncSession, data: RegistrationRequest):
 
 @pytest.mark.asyncio
 async def test_get_by_username(db: AsyncSession):
-    if await _create_test_user(db, RegistrationRequest(email="example238@gmail.com", username="username", password="fake_hashed_password")):
+    if await _create_test_user(
+        db,
+        RegistrationRequest(
+            email="example238@gmail.com",
+            username="username",
+            password="fake_hashed_password",
+        ),
+    ):
         user = await AuthRepository._get_by_username(db, "username")
 
         assert user
@@ -22,11 +30,16 @@ async def test_get_by_username(db: AsyncSession):
         assert user.locale == Locale.en
         assert user.id is not None
 
+
 @pytest.mark.asyncio
 async def test_create_new_user(db: AsyncSession):
     created: UserORM = await _create_test_user(
         db,
-        RegistrationRequest(email="example238@gmail.com", username="username", password="fake_hashed_password")
+        RegistrationRequest(
+            email="example238@gmail.com",
+            username="username",
+            password="fake_hashed_password",
+        ),
     )
 
     new_created = UserRead.model_validate(created)
@@ -34,3 +47,4 @@ async def test_create_new_user(db: AsyncSession):
     assert new_created.username == "username"
     assert new_created.locale == Locale.en
     assert new_created.id is not None
+

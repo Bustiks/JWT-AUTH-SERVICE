@@ -9,11 +9,13 @@ from src.main import app
 
 from src.database.database import Base
 
+
 @pytest.fixture(scope="session")
 def event_loop():
     loop = asyncio.new_event_loop()
     yield loop
     loop.close()
+
 
 @pytest_asyncio.fixture(scope="function")
 async def db():
@@ -24,14 +26,13 @@ async def db():
         await conn.run_sync(Base.metadata.create_all)
 
     AsyncSessionLocal = sessionmaker(
-        bind=engine,
-        class_=AsyncSession,
-        expire_on_commit=False
+        bind=engine, class_=AsyncSession, expire_on_commit=False
     )
 
     async with AsyncSessionLocal() as session:
         yield session
         await session.close()
+
 
 @pytest.fixture(scope="function")
 def client(db):
@@ -46,3 +47,4 @@ def client(db):
         yield c
 
     app.dependency_overrides.clear()
+

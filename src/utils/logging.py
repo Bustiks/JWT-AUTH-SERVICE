@@ -8,6 +8,7 @@ from colorama import Fore, Style, init
 
 init(autoreset=True)
 
+
 class SensitiveDataFilter(logging.Filter):
     def filter(self, record: logging.LogRecord) -> bool:
         message = record.getMessage().lower()
@@ -50,6 +51,7 @@ def setup_logging(config_path: str = "logging_config.yaml") -> None:
 
     logging.config.dictConfig(config)
 
+
 def log_service(logger, log_result: bool = False):
     def decorator(func):
         @wraps(func)
@@ -75,4 +77,6 @@ def log_service(logger, log_result: bool = False):
                 raise
 
         return wrapper
+
     return decorator
+
